@@ -9,6 +9,7 @@ import image_placeholder from '../../../../../images/image_placeholder.gif';
 import BrandService from '../../../../../services/BrandService';
 import ProductTypeService from '../../../../../services/ProductTypeService';
 import useElementaryAnimation from '../../../../../hooks/useElementaryAnimation';
+import AzureBlobService from '../../../../../services/AzureBlobService';
 
 interface ProductFormProps {
     form: Product;
@@ -45,7 +46,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ form, handleResetForm, fetchP
             .min(1900, 'Year must be after 2015')
             .max(new Date().getFullYear(), `Year must be before ${new Date().getFullYear() + 1}`)
             .typeError('Production year must be a number'),
-        image: Yup.mixed().required('Image is required'),
+        image: Yup.string().required('Image is required'), // Change to string for URL
     });
 
     useEffect(() => {
@@ -69,12 +70,14 @@ const ProductForm: React.FC<ProductFormProps> = ({ form, handleResetForm, fetchP
             fetchProducts(); // Trigger re-fetching products in ProductTable
             resetForm(); // Reset Formik form
             handleResetForm(); // Reset local form state
+            console.log(values);
         } catch (error) {
             console.error('Error saving product', error);
         } finally {
             setSubmitting(false);
         }
     };
+
     const handleDelete = async (id: number) => {
         try {
             await ItemService.removeItem(id);
@@ -85,23 +88,18 @@ const ProductForm: React.FC<ProductFormProps> = ({ form, handleResetForm, fetchP
         }
     };
 
-    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>, setFieldValue: any) => {
+    const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>, setFieldValue: any) => {
         const file = event.currentTarget.files?.[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                if (reader.result) {
-                    const arrayBuffer = reader.result as ArrayBuffer;
-                    const bytes = new Uint8Array(arrayBuffer);
-                    setFieldValue('image', bytes);  // Update the Formik state with the byte array
-                    console.log(bytes)
-                    setPreviewUrl(URL.createObjectURL(file));  // Update the preview URL for display
-                }
-            };
-            reader.readAsArrayBuffer(file);
+            try {
+                const imageUrl = await AzureBlobService.uploadImage(file);
+                setFieldValue('image', imageUrl); // Set image URL in Formik state
+                setPreviewUrl(imageUrl); // Update the preview URL for display
+            } catch (error) {
+                console.error('Error uploading image:', error);
+            }
         }
     };
-
     return (
         <div className={`${style.product_form_wrapper} animated_content`} data-animation="elementFromRight">
         <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} enableReinitialize>

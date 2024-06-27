@@ -1,5 +1,5 @@
 import { BlobServiceClient } from '@azure/storage-blob';
-import { DefaultAzureCredential } from '@azure/identity';
+import { ManagedIdentityCredential } from '@azure/identity';
 
 const containerName = "product-images";
 const storageAccountName = "techgiant";
@@ -9,7 +9,7 @@ class AzureBlobService {
     private containerClient: ReturnType<BlobServiceClient['getContainerClient']>;
 
     constructor() {
-        const credential = new DefaultAzureCredential();
+        const credential = new ManagedIdentityCredential();
         this.blobServiceClient = new BlobServiceClient(
             `https://${storageAccountName}.blob.core.windows.net`,
             credential
