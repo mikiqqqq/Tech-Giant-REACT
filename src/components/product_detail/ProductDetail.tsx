@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import style from "./ProductDetail.module.css";
 import ItemService from "../../services/ItemService";
 import { Product } from "../MainContainerData";
