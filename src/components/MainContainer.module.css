@@ -1,0 +1,131 @@
+.main{
+    box-sizing: border-box;
+    display: flex;
+    flex: 1;
+    background-color: #4e8f90;
+    width: calc(100% - 260px);
+    margin-left: auto;
+}
+
+.no_items{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    padding: 4rem;
+    width: 100%;
+    color: var(--background-hover);
+}
+
+.no_items > div {    
+    display: flex;
+    flex-direction: column;
+    max-width: 603px;
+    align-items: center;
+    text-align: center;
+    gap: 2rem;
+}
+
+.retry {
+    margin-bottom: .5rem;
+}
+
+.or {
+    margin-top: .5rem;
+}
+
+button.clear_all:hover,
+button.clear_all:focus,
+button.clear_all {
+    width: fit-content;
+    color: var(--background-hover);
+}
+
+#network_error{
+    font-size: 2.3em;
+    font-weight: 700;
+}
+
+.frown_face{
+    font-size: 200px;
+    transition: transform .5s;
+}
+
+.search_container{
+    min-width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+
+.search_bar{
+    height: 46px;
+    width: 100%;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border: 2px solid var(--background-hover);
+    padding: .25rem 1rem;
+    font-size: 1rem;
+    background-color: transparent;
+    color: var(--background-hover);
+    font-family: var(--bolded-font);
+}
+
+button.search_button{
+    height: 46px;
+    width: 46px;
+    border: none;
+    border-radius: 0;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: var(--background-hover);
+}
+
+.search_button path {
+    fill: var(--base-color);
+}
+
+.search_bar:focus{
+    outline: 1px solid var(--base-color);
+}
+
+.icon{
+    color: var(--base-color);
+}
+
+@keyframes flip {
+    0% {
+      transform: scaleX(1);
+    }
+    2% {
+      transform: scaleX(-1);
+    }
+    15% {
+      transform: scaleX(-1);
+    }
+    17% {
+      transform: scaleX(1);
+    }
+    100% {
+      transform: scaleX(1);
+    }
+}
+
+.flip_animation {
+    animation: flip 10s linear infinite;
+    animation-delay: 10s;
+}
+
+@media screen and (min-width: 768px) {
+    .main{
+        width: calc(100% - 300px);
+    }
+}
+  
+@media screen and (min-width: 1440px) {
+    .main{
+        width: calc(100% - 343px);
+    }
+}

@@ -1,0 +1,111 @@
+.order_summary {
+    position: relative;
+    width: 100%;
+    min-height: 400px;
+    background-color: var(--background);
+    border-radius: 1rem;
+    box-shadow: 0 0 16px 0 #222;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.p_container, .p_container_shipping {
+    display: flex;
+    justify-content: space-between;
+}
+
+.p_container_shipping {
+    color: rgb(173, 173, 173);
+}
+
+hr {
+    color: rgb(173, 173, 173);
+}
+
+#small {
+    color: rgb(173, 173, 173);
+    font-size: .75rem;
+    margin-right: .5rem;
+}
+
+.discount_form {
+    display: flex;
+    gap: 1rem;
+    margin: 1.5rem 0 1rem 0;
+}
+
+.discount_form > div {
+    width: 100%;
+}
+
+.discount_form button {
+    min-height: 52px;
+    height: fit-content;
+}
+
+.discount_form div {
+    visibility: visible !important;
+}
+
+.price_details {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.place_order_button {
+    margin-top: 1rem;
+}
+
+#alert{
+    position: absolute;
+    z-index: 50;
+    bottom: 70px;
+    width: calc(100% - 2rem);
+    background-color: var(--background);
+    border-color: var(--complementary-hover);
+    color: var(--complementary-hover);
+    padding: 1rem;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    border-width: 2px;
+    border-radius: 1rem;
+}
+
+#alert p {
+    color: var(--base-font-color);
+    font-size: 1rem;
+}
+
+#alert button{
+    border-color: var(--complementary-color);
+    color: var(--base-font-color);
+    background-color: var(--complementary-color);
+    padding: .25rem 1rem;
+}
+
+#alert button:focus,
+#alert button:hover{
+    background-color: var(--complementary-hover);
+}
+
+@media screen and (min-width: 768px) {
+    .order_summary {
+        padding: 2rem;
+    }
+
+    #alert{
+        width: calc(100% - 4rem);
+    }
+}
+
+@media screen and (min-width: 1025px) {
+    #alert{
+        top: 105%;
+        bottom: unset;
+        width: 100%;
+        left: 0;
+    }
+}

@@ -1,0 +1,132 @@
+.cart_button {
+    background-color: transparent;
+    border: none;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    transition: background-color .25s ease-in-out;
+}
+
+.icon {
+    font-size: 24px;
+    color: var(--base-color);
+    transition: 0.2s;
+}
+
+.cart_button:focus,
+.cart_button:hover {
+    background-color: rgba(160, 160, 160, 0.2);
+    outline: none;
+}
+
+#popover {
+    position: absolute;
+    min-width: 343px;
+    box-shadow: 0 0 15px 0 #111;
+    --bs-popover-border-color: none;
+    border-radius: 1rem;
+    border: 2px solid var(--base-color);
+    background-color: var(--background);
+}
+
+#popover.active {
+    border: 2px solid var(--complementary-hover);
+}
+
+#popover > div {
+    --bs-popover-bg: var(--base-color);
+}
+
+#popover.active > div {
+    --bs-popover-bg: var(--complementary-hover);
+}
+
+#popover_header {
+    background-color: var(--background);
+    text-align: center;
+    --bs-popover-header-bg: transparent;
+    border-top-right-radius: 1rem;
+    border-top-left-radius: 1rem;
+    padding: 1rem;
+    color: var(--base-color);
+    border-bottom: 2px solid var(--base-color);
+}
+
+#popover.active #popover_header {
+    color: var(--complementary-hover);
+    border-bottom: 2px solid var(--complementary-hover);
+}
+
+.add {
+    color: var(--base-font-color);
+    box-sizing: content-box;
+    display: block;
+    padding: 3rem;
+    text-align: center;
+}
+
+#popover_body {
+    background-color: var(--background-hover);
+    border-bottom-right-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    padding: 0;
+}
+
+.cart_item_container {
+    width: 100%;
+    max-height: 307px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.cart_item_container>div:last-child:after {
+   content: none;
+}
+
+.go_to_cart,
+.checkout {
+    width: 100%;
+}
+
+a.go_to_cart {
+    background-color: var(--base-hover);
+}
+
+a.go_to_cart:hover {
+    background-color: var(--base-color);
+}
+
+.button_container {
+    width: 100%;
+    display: flex;
+    background-color: var(--background);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border-bottom-right-radius: 1rem;
+    border-bottom-left-radius: 1rem;
+    padding: 1rem;
+}
+
+.total_price {
+    display: flex;
+    justify-content: space-between;
+    color: var(--complementary-hover);
+}
+
+@media screen and (min-width: 768px) {
+    #popover {
+        min-width: 480px;
+    }
+
+    .cart_item_container {
+        max-height: 457px;
+    }
+}

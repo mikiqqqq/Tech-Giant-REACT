@@ -1,0 +1,131 @@
+.sidebar{
+  box-sizing: border-box;
+  width: 260px;
+  background: var(--background);
+  box-shadow: 0 9px 20px 0 #222;
+  font-family: Gotham,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Droid Sans,Helvetica Neue,sans-serif;
+  transition: min-width .25s ease;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  z-index: 20;
+}
+
+.fixed{
+  position: sticky;
+  width: 100%;
+  top: 0;
+  margin-top: calc(var(--ann-bar-height) + var(--header-height));
+  max-height: calc(100% - var(--header-height) - var(--ann-bar-height) - var(--footer-height));
+  overflow-y: auto;
+  padding-bottom: 35px;
+  margin-bottom: calc(var(--footer-height));
+}
+
+.filter_title{
+  margin-top: 60px;
+  color: var(--base-color);
+  margin-left: 1rem;
+  margin-bottom: .5rem;
+}
+
+.accordion_header > button:focus{
+  outline: none;
+  box-shadow: none;
+}
+
+.accordion{
+  border-top: 2px solid var(--base-color);
+}
+
+.accordion_header{
+  border-bottom: 1px solid var(--base-color);
+  background-color: #656a75 !important;
+  margin-top: -1px;
+  outline: none !important;
+}
+
+.accordion_header > button {
+  background: var(--background-hover) !important;
+  color: var(--base-color) !important;
+  box-shadow: none !important;
+  height: 50px;
+  outline: none !important;
+}
+
+.accordion_header > button:after{
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512' fill='%2300bdbf'%3E%3Cpath d='M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z'/%3E%3C/svg%3E");  
+  background-size: 22px 22px;
+}
+
+.accordion_header > button:not(.collapsed)::after{
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512' fill='%2300bdbf'%3E%3Cpath d='M201.4 374.6c12.5 12.5 32.8 12.5 45.3 0l160-160c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L224 306.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l160 160z'/%3E%3C/svg%3E");
+}
+
+.accordion_body{
+    background-color: #20232a;
+    border-bottom: 1px solid var(--base-color);
+    color: var(--base-color);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: .5rem;
+    padding: 1rem;
+}
+
+.accordion_body_radio{
+  background-color: #20232a;
+  display: flex;
+  flex-direction: column;
+  padding: 0 !important;
+}
+
+.accordion_body_sort{
+  background-color: #20232a;
+  display: flex;
+  padding: 0 !important;
+}
+
+.accordion_item > div{
+  border-radius: 0 !important;
+}
+
+.radio_button > input{
+  cursor: pointer;
+}
+
+.radio_button > input:focus{
+  background-color: var(--base-color);
+  outline: none;
+  box-shadow: none;
+  border-color: forestgreen;
+}
+
+.radio_button > input:checked{
+  background-color: var(--base-color);
+}
+
+.image_container{
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.image{
+  width: 55%;
+  margin-right: 5px;
+}
+
+@media screen and (min-width: 768px) {
+  .sidebar{
+    width: 300px;
+  }  
+}
+
+@media screen and (min-width: 1440px) {
+  .sidebar{
+    width: 343px;
+  }  
+}
