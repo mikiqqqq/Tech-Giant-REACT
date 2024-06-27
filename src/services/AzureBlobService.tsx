@@ -1,38 +1,28 @@
-import { BlobServiceClient } from '@azure/storage-blob';
-import { ManagedIdentityCredential } from '@azure/identity';
+import { BlobClient, ContainerClient } from '@azure/storage-blob';
 
-const containerName = "product-images";
+const sasToken = "sv=2022-11-02&ss=b&srt=o&sp=rwlitfx&se=2025-01-01T07:34:11Z&st=2024-06-24T22:34:11Z&spr=https&sig=Sm5ATIHYRDSnJXPWW6e%2FlIb%2Fr4PjByzMx2%2Fh4b6RLzE%3D";
 const storageAccountName = "techgiant";
+const containerName = "product-images";
 
 class AzureBlobService {
-    private blobServiceClient: BlobServiceClient;
-    private containerClient: ReturnType<BlobServiceClient['getContainerClient']>;
+    private containerClient: ContainerClient;
 
     constructor() {
-        const credential = new ManagedIdentityCredential();
-        this.blobServiceClient = new BlobServiceClient(
-            `https://${storageAccountName}.blob.core.windows.net`,
-            credential
-        );
-        this.containerClient = this.blobServiceClient.getContainerClient(containerName);
+        const containerUrl = `https://${storageAccountName}.blob.core.windows.net/${containerName}`;
+        this.containerClient = new ContainerClient(`${containerUrl}?${sasToken}`);
     }
 
     async uploadImage(file: File): Promise<string> {
-        const blobClient = this.containerClient.getBlockBlobClient(file.name);
+        const blobName = file.name;
+        const blobClient = this.containerClient.getBlockBlobClient(blobName);
         await blobClient.uploadData(file);
-        return blobClient.url;
+        console.log(blobClient)
+        return blobClient.url.split('?')[0]; // Return the URL without the SAS token
     }
 
-    async downloadImage(fileName: string): Promise<Blob> {
-        const blobClient = this.containerClient.getBlobClient(fileName);
-        const downloadBlockBlobResponse = await blobClient.download(0);
-        const blob = await downloadBlockBlobResponse.blobBody;
-
-        if (blob) {
-            return blob;
-        } else {
-            throw new Error("Unable to download image.");
-        }
+    async getImageUrl(blobName: string): Promise<string> {
+        const blobClient = this.containerClient.getBlobClient(blobName);
+        return blobClient.url.split('?')[0]; // Return the URL without the SAS token
     }
 }
 

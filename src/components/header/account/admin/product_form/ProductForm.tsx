@@ -46,7 +46,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ form, handleResetForm, fetchP
             .min(1900, 'Year must be after 2015')
             .max(new Date().getFullYear(), `Year must be before ${new Date().getFullYear() + 1}`)
             .typeError('Production year must be a number'),
-        image: Yup.string().required('Image is required'), // Change to string for URL
+        image: Yup.string().nullable().required('Image is required'), // Update here
     });
 
     useEffect(() => {
@@ -91,176 +91,175 @@ const ProductForm: React.FC<ProductFormProps> = ({ form, handleResetForm, fetchP
     const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>, setFieldValue: any) => {
         const file = event.currentTarget.files?.[0];
         if (file) {
-            try {
-                const imageUrl = await AzureBlobService.uploadImage(file);
-                setFieldValue('image', imageUrl); // Set image URL in Formik state
-                setPreviewUrl(imageUrl); // Update the preview URL for display
-            } catch (error) {
-                console.error('Error uploading image:', error);
-            }
+            const imageUrl = URL.createObjectURL(file);
+            setFieldValue('image', imageUrl); // Set image URL in Formik state
+            setPreviewUrl(imageUrl); // Update the preview URL for display
+        } else {
+            setFieldValue('image', null); // Set image URL to null if no file selected
+            setPreviewUrl(null); // Update the preview URL to null
         }
     };
+
     return (
         <div className={`${style.product_form_wrapper} animated_content`} data-animation="elementFromRight">
-        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} enableReinitialize>
-            {({ handleChange, setFieldValue, values, touched, errors, isSubmitting }) => (
-                <FormikForm className={`${style.product_form} form`} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
-                    <div className="mb-3">
-                        <img
-                            className={style.product_image}
-                            src={previewUrl || image_placeholder}
-                            alt="Product"
-                            style={{ maxWidth: "100%", height: "auto" }}
-                        />
-                    </div>
-                    <div>
-                        <BootstrapForm.Group controlId="formFile" className="file_input">
-                            <BootstrapForm.Label className="u-pb1" >Select Image</BootstrapForm.Label>
-                            <BootstrapForm.Control
-                                type="file"
-                                onChange={(event) => handleImageChange(event as React.ChangeEvent<HTMLInputElement>, setFieldValue)}
-                                isInvalid={touched.image && !!errors.image}
-                                isValid={touched.image && !errors.image}
+            <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit} enableReinitialize>
+                {({ handleChange, setFieldValue, values, touched, errors, isSubmitting }) => (
+                    <FormikForm className={`${style.product_form} form`} placeholder={undefined} onPointerEnterCapture={undefined} onPointerLeaveCapture={undefined}>
+                        <div className="mb-3">
+                            <img
+                                className={style.product_image}
+                                src={previewUrl || image_placeholder}
+                                alt="Product"
+                                style={{ maxWidth: "100%", height: "auto" }}
                             />
-                            <BootstrapForm.Control.Feedback type="invalid" style={{ visibility: !!errors.image && touched.image ? "visible" : "hidden" }}>
-                                {errors.image}
-                            </BootstrapForm.Control.Feedback>
-                        </BootstrapForm.Group>
-                    </div>
-                    <div>
-                        <FloatingLabel label="Title">
-                            <BootstrapForm.Control
-                                type="text"
-                                name="title"
-                                placeholder="Title"
-                                onChange={handleChange}
-                                value={values.title}
-                                isInvalid={touched.title && !!errors.title}
-                                isValid={touched.title && !errors.title}
-                            />
-                            <BootstrapForm.Control.Feedback type="invalid" style={{ visibility: !!errors.title && touched.title ? "visible" : "hidden" }}>
-                                {errors.title}
-                            </BootstrapForm.Control.Feedback>
-                        </FloatingLabel>
-                    </div>
-                    <div>
-                        <FloatingLabel label="Description">
-                            <BootstrapForm.Control
-                                as="textarea"
-                                name="description"
-                                placeholder="Description"
-                                onChange={handleChange}
-                                value={values.description}
-                                isInvalid={touched.description && !!errors.description}
-                                isValid={touched.description && !errors.description}
-                            />
-                            <BootstrapForm.Control.Feedback type="invalid" style={{ visibility: !!errors.description && touched.description ? "visible" : "hidden" }}>
-                                {errors.description}
-                            </BootstrapForm.Control.Feedback>
-                        </FloatingLabel>
-                    </div>
-                    <div>
-                        <FloatingLabel label="Price">
-                            <BootstrapForm.Control
-                                type="text"
-                                name="price"
-                                placeholder="Price"
-                                onChange={handleChange}
-                                value={values.price}
-                                isInvalid={touched.price && !!errors.price}
-                                isValid={touched.price && !errors.price}
-                            />
-                            <BootstrapForm.Control.Feedback type="invalid" style={{ visibility: !!errors.price && touched.price ? "visible" : "hidden" }}>
-                                {errors.price}
-                            </BootstrapForm.Control.Feedback>
-                        </FloatingLabel>
-                    </div>
-                    <div>
-                        <FloatingLabel label="Quantity">
-                            <BootstrapForm.Control
-                                type="text"
-                                name="quantity"
-                                placeholder="Quantity"
-                                onChange={handleChange}
-                                value={values.quantity}
-                                isInvalid={touched.quantity && !!errors.quantity}
-                                isValid={touched.quantity && !errors.quantity}
-                            />
-                            <BootstrapForm.Control.Feedback type="invalid" style={{ visibility: !!errors.quantity && touched.quantity ? "visible" : "hidden" }}>
-                                {errors.quantity}
-                            </BootstrapForm.Control.Feedback>
-                        </FloatingLabel>
-                    </div>
-                    <div>
-                        <FloatingLabel label="Brand">
-                            <BootstrapForm.Select
-                                name="brand.id"
-                                onChange={(e) => setFieldValue('brand', brands.find(brand => brand.id === Number(e.target.value)))}
-                                value={values.brand.id}
-                                isInvalid={touched.brand?.id && !!errors.brand?.id}
-                                isValid={touched.brand?.id && !errors.brand?.id}
-                            >
-                                <option value="" disabled>Select a brand</option>
-                                {brands.map((brand) => (
-                                    <option key={brand.id} value={brand.id}>{brand.title}</option>
-                                ))}
-                            </BootstrapForm.Select>
-                            <BootstrapForm.Control.Feedback type="invalid" style={{ visibility: !!errors.brand?.id && touched.brand?.id ? "visible" : "hidden" }}>
-                                {errors.brand?.id}
-                            </BootstrapForm.Control.Feedback>
-                        </FloatingLabel>
-                    </div>
-                    <div>
-                        <FloatingLabel label="Type">
-                            <BootstrapForm.Select
-                                name="productType.id"
-                                onChange={(e) => setFieldValue('productType', productTypes.find(type => type.id === Number(e.target.value)))}
-                                value={values.productType.id}
-                                isInvalid={touched.productType?.id && !!errors.productType?.id}
-                                isValid={touched.productType?.id && !errors.productType?.id}
-                            >
-                                <option value="" disabled>Select a type</option>
-                                {productTypes.map((type) => (
-                                    <option key={type.id} value={type.id}>{type.title}</option>
-                                ))}
-                            </BootstrapForm.Select>
-                            <BootstrapForm.Control.Feedback type="invalid" style={{ visibility: !!errors.productType?.id && touched.productType?.id ? "visible" : "hidden" }}>
-                                {errors.productType?.id}
-                            </BootstrapForm.Control.Feedback>
-                        </FloatingLabel>
-                    </div>
-                    <div>
-                        <FloatingLabel label="Production Year">
-                            <BootstrapForm.Control
-                                type="text"
-                                name="productionYear"
-                                placeholder="Production Year"
-                                onChange={handleChange}
-                                value={values.productionYear}
-                                isInvalid={touched.productionYear && !!errors.productionYear}
-                                isValid={touched.productionYear && !errors.productionYear}
-                            />
-                            <BootstrapForm.Control.Feedback type="invalid" style={{ visibility: !!errors.productionYear && touched.productionYear ? "visible" : "hidden" }}>
-                                {errors.productionYear}
-                            </BootstrapForm.Control.Feedback>
-                        </FloatingLabel>
-                    </div>
-                    <div className={style.button_container}>
-                    <Button type="submit" className={`${style.action_button} button_complementary u-pb1`} disabled={isSubmitting}>
-                        {form.id ? 'Save' : 'Add'}
-                    </Button>
-                    {form.id && (
-                        <Button type="button" onClick={() => handleDelete(form.id)}
-                            disabled={isSubmitting} className={`${style.action_button} button_complementary u-pb1`}>
-                            Delete
-                        </Button>
-                    )}
-                    </div>
-            </FormikForm>
-        )}
-    </Formik>
-    </div>
-);
+                        </div>
+                        <div>
+                            <BootstrapForm.Group controlId="formFile" className="file_input">
+                                <BootstrapForm.Label className="u-pb1">Select Image</BootstrapForm.Label>
+                                <BootstrapForm.Control
+                                    type="file"
+                                    onChange={(event) => handleImageChange(event as React.ChangeEvent<HTMLInputElement>, setFieldValue)}
+                                    isInvalid={touched.image && !!errors.image}
+                                    isValid={touched.image && !errors.image}
+                                />
+                                <BootstrapForm.Control.Feedback type="invalid" style={{ visibility: !!errors.image && touched.image ? "visible" : "hidden" }}>
+                                    {errors.image}
+                                </BootstrapForm.Control.Feedback>
+                            </BootstrapForm.Group>
+                        </div>
+                        <div>
+                            <FloatingLabel label="Title">
+                                <BootstrapForm.Control
+                                    type="text"
+                                    name="title"
+                                    placeholder="Title"
+                                    onChange={handleChange}
+                                    value={values.title}
+                                    isInvalid={touched.title && !!errors.title}
+                                    isValid={touched.title && !errors.title}
+                                />
+                                <BootstrapForm.Control.Feedback type="invalid" style={{ visibility: !!errors.title && touched.title ? "visible" : "hidden" }}>
+                                    {errors.title}
+                                </BootstrapForm.Control.Feedback>
+                            </FloatingLabel>
+                        </div>
+                        <div>
+                            <FloatingLabel label="Description">
+                                <BootstrapForm.Control
+                                    as="textarea"
+                                    name="description"
+                                    placeholder="Description"
+                                    onChange={handleChange}
+                                    value={values.description}
+                                    isInvalid={touched.description && !!errors.description}
+                                    isValid={touched.description && !errors.description}
+                                />
+                                <BootstrapForm.Control.Feedback type="invalid" style={{ visibility: !!errors.description && touched.description ? "visible" : "hidden" }}>
+                                    {errors.description}
+                                </BootstrapForm.Control.Feedback>
+                            </FloatingLabel>
+                        </div>
+                        <div>
+                            <FloatingLabel label="Price">
+                                <BootstrapForm.Control
+                                    type="text"
+                                    name="price"
+                                    placeholder="Price"
+                                    onChange={handleChange}
+                                    value={values.price}
+                                    isInvalid={touched.price && !!errors.price}
+                                    isValid={touched.price && !errors.price}
+                                />
+                                <BootstrapForm.Control.Feedback type="invalid" style={{ visibility: !!errors.price && touched.price ? "visible" : "hidden" }}>
+                                    {errors.price}
+                                </BootstrapForm.Control.Feedback>
+                            </FloatingLabel>
+                        </div>
+                        <div>
+                            <FloatingLabel label="Quantity">
+                                <BootstrapForm.Control
+                                    type="text"
+                                    name="quantity"
+                                    placeholder="Quantity"
+                                    onChange={handleChange}
+                                    value={values.quantity}
+                                    isInvalid={touched.quantity && !!errors.quantity}
+                                    isValid={touched.quantity && !errors.quantity}
+                                />
+                                <BootstrapForm.Control.Feedback type="invalid" style={{ visibility: !!errors.quantity && touched.quantity ? "visible" : "hidden" }}>
+                                    {errors.quantity}
+                                </BootstrapForm.Control.Feedback>
+                            </FloatingLabel>
+                        </div>
+                        <div>
+                            <FloatingLabel label="Brand">
+                                <BootstrapForm.Select
+                                    name="brand.id"
+                                    onChange={(e) => setFieldValue('brand', brands.find(brand => brand.id === Number(e.target.value)))}
+                                    value={values.brand.id}
+                                    isInvalid={touched.brand?.id && !!errors.brand?.id}
+                                    isValid={touched.brand?.id && !errors.brand?.id}
+                                >
+                                    <option value="" disabled>Select a brand</option>
+                                    {brands.map((brand) => (
+                                        <option key={brand.id} value={brand.id}>{brand.title}</option>
+                                    ))}
+                                </BootstrapForm.Select>
+                                <BootstrapForm.Control.Feedback type="invalid" style={{ visibility: !!errors.brand?.id && touched.brand?.id ? "visible" : "hidden" }}>
+                                    {errors.brand?.id}
+                                </BootstrapForm.Control.Feedback>
+                            </FloatingLabel>
+                        </div>
+                        <div>
+                            <FloatingLabel label="Type">
+                                <BootstrapForm.Select
+                                    name="productType.id"
+                                    onChange={(e) => setFieldValue('productType', productTypes.find(type => type.id === Number(e.target.value)))}
+                                    value={values.productType.id}
+                                    isInvalid={touched.productType?.id && !!errors.productType?.id}
+                                    isValid={touched.productType?.id && !errors.productType?.id}
+                                >
+                                    <option value="" disabled>Select a type</option>
+                                    {productTypes.map((type) => (
+                                        <option key={type.id} value={type.id}>{type.title}</option>
+                                    ))}
+                                </BootstrapForm.Select>
+                                <BootstrapForm.Control.Feedback type="invalid" style={{ visibility: !!errors.productType?.id && touched.productType?.id ? "visible" : "hidden" }}>
+                                    {errors.productType?.id}
+                                </BootstrapForm.Control.Feedback>
+                            </FloatingLabel>
+                        </div>
+                        <div>
+                            <FloatingLabel label="Production Year">
+                                <BootstrapForm.Control
+                                    type="text"
+                                    name="productionYear"
+                                    placeholder="Production Year"
+                                    onChange={handleChange}
+                                    value={values.productionYear}
+                                    isInvalid={touched.productionYear && !!errors.productionYear}
+                                    isValid={touched.productionYear && !errors.productionYear}
+                                />
+                                <BootstrapForm.Control.Feedback type="invalid" style={{ visibility: !!errors.productionYear && touched.productionYear ? "visible" : "hidden" }}>
+                                    {errors.productionYear}
+                                </BootstrapForm.Control.Feedback>
+                            </FloatingLabel>
+                        </div>
+                        <div className={style.button_container}>
+                            <Button type="submit" className={`${style.action_button} button_complementary u-pb1`} disabled={isSubmitting}>
+                                {form.id ? 'Save' : 'Add'}
+                            </Button>
+                            {form.id && (
+                                <Button type="button" onClick={() => handleDelete(form.id)} disabled={isSubmitting} className={`${style.action_button} button_complementary u-pb1`}>
+                                    Delete
+                                </Button>
+                            )}
+                        </div>
+                    </FormikForm>
+                )}
+            </Formik>
+        </div>
+    );
 };
 
 export default ProductForm;

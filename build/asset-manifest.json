@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/static/css/main.cae08de0.css",
-    "main.js": "/static/js/main.6312acbb.js",
+    "main.js": "/static/js/main.25b1c337.js",
     "static/media/Gilroy-Bold.woff2": "/static/media/Gilroy-Bold.d4f56a7321568dc107b0.woff2",
     "static/media/PlusJakartaSans-Light.woff2": "/static/media/PlusJakartaSans-Light.e3be4478f92a519e7e24.woff2",
     "index.html": "/index.html",
     "main.cae08de0.css.map": "/static/css/main.cae08de0.css.map",
-    "main.6312acbb.js.map": "/static/js/main.6312acbb.js.map"
+    "main.25b1c337.js.map": "/static/js/main.25b1c337.js.map"
   },
   "entrypoints": [
     "static/css/main.cae08de0.css",
-    "static/js/main.6312acbb.js"
+    "static/js/main.25b1c337.js"
   ]
 }

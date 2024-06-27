@@ -56,7 +56,7 @@ const Item: React.FC<Props> = ({ item }) => {
 
   return (
       <Link to={`/products/${productSlug}`} className={`${style.item_box} animated_content`}>
-        <img className={style.image} src={item.image || image_placeholder} alt={item.title}></img>
+        <img className={style.image} src={image_placeholder} alt={item.title}></img>
         <div className={style.item_info}>
           <div className={style.item_header}>
             <div className={`${style.item_name} u-h3`}>{item.title}</div>
