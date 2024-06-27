@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
-import 'swiper/css';
-import { Swiper, SwiperSlide } from 'swiper/react';
 import style from "./ProductDetail.module.css";
 import ItemService from "../../services/ItemService";
 import { Product } from "../MainContainerData";
 import image_placeholder from '../../images/image_placeholder.gif'
 import Item from "../item_container/item/Item";
 import OrderItemService from "../../services/OrderItemService";
+import 'swiper/css';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import OrderService from "../../services/OrderService";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import ItemQuantitySelector from "../item_container/item/quantity_selector/ItemQuantitySelector";
