@@ -11,26 +11,21 @@ interface Props {
 }
 
 const SortName: React.FunctionComponent<Props> = props => {
-    const [filterOptions, setFilterOptions] = useState<FilterOptions>(props.filterOptions);
-    const [isActive, setIsActive] = useState<string>('ASC');
+    const [isActive, setIsActive] = useState<string>(props.filterOptions.sortOrder || 'ASC');
 
     const handleClick = (sortOrder: string) => {
-        setIsActive(sortOrder);
-
-        setFilterOptions(() => {
-            return {
+        if (isActive !== sortOrder) {
+            setIsActive(sortOrder);
+            const updatedFilterOptions = {
                 ...props.filterOptions,
                 sortBy: "NAME",
                 sortOrder: sortOrder
             };
-        });
-
-        props.onSortOrderChange(sortOrder); // Call this when sort order changes
+            props.onFilterOptions(updatedFilterOptions);
+            props.onSortOrderChange(sortOrder); // Call this when sort order changes
+        }
     };
-    useEffect(() => {
-        props.onFilterOptions(filterOptions);
-    }, [filterOptions]);
-    
+
     return (
         <>
             <button 

@@ -24,6 +24,7 @@ const SortPrice: React.FunctionComponent<Props> = props => {
                 sortOrder: sortOrder
             };
         });
+        
 
         props.onSortOrderChange(sortOrder); // Call this when sort order changes
     };

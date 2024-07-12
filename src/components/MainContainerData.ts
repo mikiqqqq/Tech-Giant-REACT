@@ -9,7 +9,7 @@ export interface ProductType {
 }
 
 export interface Product {
-    id: number;
+    id: number | null;
     title: string;
     description: string;
     price: number;
@@ -88,7 +88,7 @@ export interface OrderObject {
     phoneNumber: number;
     deliveryAddress: string;
     note: string;
-    products: Product[];
+    orderItems: OrderItemType[]; 
 }
 
 export interface SearchOptions {

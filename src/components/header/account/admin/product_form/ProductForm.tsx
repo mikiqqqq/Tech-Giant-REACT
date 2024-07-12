@@ -19,7 +19,7 @@ interface ProductFormProps {
 }
 
 const ProductForm: React.FC<ProductFormProps> = ({ form, handleResetForm, fetchProducts, handleSelectProduct }) => {
-    const initialValues = form;
+    const initialValues = { ...form, id: form.id || null };    
     const [previewUrl, setPreviewUrl] = useState<string | null>(form.image ? form.image : null);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -86,6 +86,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ form, handleResetForm, fetchP
                 imageUrl = await AzureBlobService.uploadImage(selectedFile);
             }
 
+            console.log({ ...values, image: imageUrl })
             const response = await ItemService.addItem({ ...values, image: imageUrl });
             const savedProduct = response.data;
 
@@ -274,11 +275,11 @@ const ProductForm: React.FC<ProductFormProps> = ({ form, handleResetForm, fetchP
                             <Button type="submit" className={`${style.action_button} button_complementary u-pb1`} disabled={isSubmitting}>
                                 {form.id ? 'Save' : 'Add'}
                             </Button>
-                            {form.id && (
-                                <Button type="button" onClick={() => handleDelete(form.id)} disabled={isSubmitting} className={`${style.action_button} button_complementary u-pb1`}>
+                            {form.id !== 0 && form.id != null && (
+                                <Button type="button" onClick={() => handleDelete(form.id as number)} disabled={isSubmitting} className={`${style.action_button} button_complementary u-pb1`}>
                                     Delete
                                 </Button>
-                            )}
+                            )}                        
                         </div>
                     </FormikForm>
                 )}

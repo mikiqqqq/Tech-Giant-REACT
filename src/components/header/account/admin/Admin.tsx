@@ -13,8 +13,8 @@ const Admin: React.FC = () => {
         description: '',
         price: 0,
         quantity: 0,
-        brand: { id: 0, title: '' },
-        productType: { id: 0, title: '' },
+        brand: { id: 1, title: '' },
+        productType: { id: 1, title: '' },
         image: '',
         productionYear: 0
     });
@@ -38,8 +38,8 @@ const Admin: React.FC = () => {
             description: '',
             price: 0,
             quantity: 0,
-            brand: { id: 0, title: '' },
-            productType: { id: 0, title: '' },
+            brand: { id: 1, title: '' },
+            productType: { id: 1, title: '' },
             image: '',
             productionYear: 0
         });

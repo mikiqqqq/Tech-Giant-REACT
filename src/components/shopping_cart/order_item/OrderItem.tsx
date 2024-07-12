@@ -87,7 +87,7 @@ const OrderItem: React.FunctionComponent<Props> = ({ orderItem, onPriceChange, o
           <div className={`${style.actions} custom-display`}>
             <QuantitySelector orderItem={orderItem} product={product} onPriceChange={onPriceChange} />
 
-            <strong className={`u-p1`} id={style.item_price}>€{(orderItem.quantity * product.price).toFixed(2)}</strong>
+            <strong className={`u-p1`} id={style.item_price}>€ {(orderItem.quantity * product.price).toFixed(2)}</strong>
           </div>
         </div>
       </div>

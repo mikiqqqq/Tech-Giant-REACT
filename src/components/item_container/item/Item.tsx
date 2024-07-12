@@ -30,9 +30,9 @@ const Item: React.FC<Props> = ({ item }) => {
       const response = await OrderService.createOrder();
       const activeOrderId = Number(response.data);
       setLocalStateActiveOrder(activeOrderId);
-      await OrderItemService.addOrderItem(quantity, activeOrderId, item.id);
+      await OrderItemService.addOrderItem(quantity, activeOrderId, item.id as number);
     } else {
-      await OrderItemService.addOrderItem(quantity, orderId, item.id);
+      await OrderItemService.addOrderItem(quantity, orderId, item.id as number);
     }
   };
 
@@ -89,7 +89,7 @@ const Item: React.FC<Props> = ({ item }) => {
               </Tooltip>
             </Overlay>
           </div>
-          <strong className={`${style.item_price} u-pb1`}>€{item.price.toFixed(2)}</strong>
+          <strong className={`${style.item_price} u-pb1`}>€ {item.price.toFixed(2)}</strong>
         </div>
       </div>
     </Link>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Product } from "./MainContainerData";
 import style from "./MainContainer.module.css";
 import Items from "./item_container/Items";
@@ -15,19 +15,18 @@ interface MainContainerProps {
 const MainContainer: React.FC<MainContainerProps> = ({ items, error, onClearAll }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [inputValue, setInputValue] = useState('');
-  const [filteredItems, setFilteredItems] = useState<Product[]>(items);
-
-  useEffect(() => {
-    const searchQuery = searchParams.get('search');
+  
+  const searchQuery = searchParams.get('search') || '';
+  
+  // Use useMemo to compute filteredItems only when items or searchQuery changes
+  const filteredItems = useMemo(() => {
     if (searchQuery) {
-      const filtered = items.filter(item => 
+      return items.filter(item => 
         item.title.toLowerCase().includes(searchQuery.toLowerCase())
       );
-      setFilteredItems(filtered);
-    } else {
-      setFilteredItems(items);
     }
-  }, [searchParams, items]);
+    return items;
+  }, [items, searchQuery]);
 
   const handleInputChange = (e: React.FormEvent<HTMLInputElement>) => {
     setInputValue((e.target as HTMLInputElement).value);

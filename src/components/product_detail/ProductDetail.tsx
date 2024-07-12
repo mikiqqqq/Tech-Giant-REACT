@@ -32,9 +32,9 @@ const ProductDetail: React.FC = () => {
             const response = await OrderService.createOrder();
             const activeOrderId = Number(response.data);
             setLocalStateActiveOrder(activeOrderId);
-            await OrderItemService.addOrderItem(quantity, activeOrderId, product.id);
+            await OrderItemService.addOrderItem(quantity, activeOrderId, product.id as number);
         } else {
-            await OrderItemService.addOrderItem(quantity, orderId, product.id);
+            await OrderItemService.addOrderItem(quantity, orderId, product.id as number);
         }
 
         setShowTooltip(true);
@@ -95,7 +95,7 @@ const ProductDetail: React.FC = () => {
                         </div>
                     </div>
                     <div className={`${style.actions} custom-display`}>
-                        <p className={`${style.price} u-pb1`}>€{product.price}</p>
+                        <p className={`${style.price} u-pb1`}>€ {product.price}</p>
                         <ItemQuantitySelector
                             maxQuantity={product.quantity}
                             onQuantityChange={setQuantity}

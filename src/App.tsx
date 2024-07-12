@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Route, Routes, useLocation, useSearchParams } from 'react-router-dom';
 import './App.css';
 import Checkout from './components/checkout/Checkout';
@@ -37,7 +37,7 @@ function App() {
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const fetchItems = useCallback(() => {
+  const fetchItems = () => {
     const search = searchParams.get('search');
     if (search) {
       ItemService.findAllThatContainTarget(search).then((response) => {
@@ -50,11 +50,11 @@ function App() {
         setError(false);
       }).catch(() => setError(true));
     }
-  }, [filterOptions, searchParams]);
+  };
 
   useEffect(() => {
     fetchItems();
-  }, [fetchItems]);
+  }, [filterOptions, searchParams]);
 
   const handleFilterOptionsChange = (newFilterOptions: FilterOptions) => {
     setFilterOptions(newFilterOptions);
@@ -73,31 +73,31 @@ function App() {
   }, [resetFilters]);
 
   return (
-      <div className="page">
-        <AnnouncementBar />
-        <Header />
-        {location.pathname === '/' && (
-          <FixedSidebar 
-            filterOptions={filterOptions}
-            onFilterOptions={handleFilterOptionsChange}
-            reset={resetFilters}
-          />
-        )}
-        <div className="scrollbar_placeholder"></div>
-        <Routes>
-          <Route path="/" element={<MainContainer items={items} error={error} onClearAll={handleClearAll} />} />
-          <Route path="/products/*" element={<ProductDetail />} />
-          <Route path="/cart" element={<ShoppingCart />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/account/*" element={<PrivateRoute component={Account} roles={['USER', 'ADMIN']} authPath="/login" redirectPath="/" />} />
-          <Route path="/admin" element={<PrivateRoute component={Admin} roles={['ADMIN']} authPath="/" redirectPath="/" />} />
-          <Route path="*" element={<WrongRoute />} />
-        </Routes>
-        <Support />
-        <Footer />
-      </div>
+    <div className="page">
+      <AnnouncementBar />
+      <Header />
+      {location.pathname === '/' && (
+        <FixedSidebar 
+          filterOptions={filterOptions}
+          onFilterOptions={handleFilterOptionsChange}
+          reset={resetFilters}
+        />
+      )}
+      <div className="scrollbar_placeholder"></div>
+      <Routes>
+        <Route path="/" element={<MainContainer items={items} error={error} onClearAll={handleClearAll} />} />
+        <Route path="/products/*" element={<ProductDetail />} />
+        <Route path="/cart" element={<ShoppingCart />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/account/*" element={<PrivateRoute component={Account} roles={['USER', 'ADMIN']} authPath="/login" redirectPath="/" />} />
+        <Route path="/admin" element={<PrivateRoute component={Admin} roles={['ADMIN']} authPath="/" redirectPath="/" />} />
+        <Route path="*" element={<WrongRoute />} />
+      </Routes>
+      <Support />
+      <Footer />
+    </div>
   );
 }
 

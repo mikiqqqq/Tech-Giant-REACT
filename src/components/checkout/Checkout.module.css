@@ -72,7 +72,10 @@
 
 .icon_truck {
     font-size: 250px;
-    color: var(--background);
+}
+
+.icon_truck {
+    fill: var(--background);
 }
 
 @keyframes flip {

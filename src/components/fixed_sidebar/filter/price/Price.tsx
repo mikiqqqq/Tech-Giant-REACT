@@ -56,7 +56,7 @@ const Price: React.FunctionComponent<Props> = props => {
           className={`${style.choose_button} ${isActive[0] === priceOption[0] && isActive[1] === priceOption[1] ? style.selected : ""}`}
           key={priceOption[0]}
         >
-          {priceOption[0]}€ - {priceOption[1]}€
+          € {priceOption[0]} - € {priceOption[1]}
         </button>
       ))}
 

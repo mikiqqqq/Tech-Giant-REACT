@@ -133,7 +133,7 @@ const ShoppingCart: React.FunctionComponent = () => {
               <p>Shipping fee</p> <p>Free</p>
             </div>
             <div className={`${style.p_container} rte u-p2`}>
-              <p>Total price</p> <p>${totalPrice.toFixed(2)}</p>
+              <p>Total price</p> <p>€ {totalPrice.toFixed(2)}</p>
             </div>
             <small className={`${style.label} u-p4`}>Coupons can be used in the next step.</small>
             <Link className={`${style.checkout_button} button_complementary u-pb1 btn btn-primary`} to="/checkout"

@@ -140,7 +140,7 @@ const ShoppingCartButton: React.FunctionComponent = () => {
               <div className={style.button_container}>
                 <div className={`${style.total_price}`}>
                   <p className='u-h2'>Total price: </p>
-                  <p className='u-h2'>${totalPrice.toFixed(2)}</p>
+                  <p className='u-h2'>€ {totalPrice.toFixed(2)}</p>
                 </div>
 
                 <Link className={`${style.go_to_cart} button_complementary btn-primary u-pb1`} to="/cart" onClick={hidePopup}>

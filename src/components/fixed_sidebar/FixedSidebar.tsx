@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import style from './FixedSidebar.module.css';
 import Accordion from 'react-bootstrap/Accordion';
 import Brand from './filter/brand/Brand';
@@ -26,19 +26,7 @@ const FixedSidebar: React.FunctionComponent<Props> = props => {
   const backgroundColor = window.getComputedStyle(document.documentElement).getPropertyValue('--background');
   useElementaryAnimation();
 
-  const handleClick = (sortBy: string, sortOrder: string) => {
-    setLocalFilterOptions(prevFilterOptions => ({
-      ...prevFilterOptions,
-      sortBy: sortBy,
-      sortOrder: sortOrder
-    }));
-  };
-
-  useEffect(() => {
-    onFilterOptions(localFilterOptions);
-  }, [localFilterOptions]);
-
-  const handleSortOrderChange = (sortBy: string, sortOrder: string) => {
+  const handleSortOrderChange = useCallback((sortBy: string, sortOrder: string) => {
     if (sortBy === "PRICE") {
       setSortOrderPrice(sortOrder);
     } else if (sortBy === "NAME") {
@@ -49,7 +37,11 @@ const FixedSidebar: React.FunctionComponent<Props> = props => {
       sortBy: sortBy,
       sortOrder: sortOrder
     }));
-  };
+  }, []);
+
+  useEffect(() => {
+    onFilterOptions(localFilterOptions);
+  }, [localFilterOptions, onFilterOptions]);
 
   useEffect(() => {
     if (reset) {
@@ -66,14 +58,14 @@ const FixedSidebar: React.FunctionComponent<Props> = props => {
         <Accordion className={style.accordion} flush>
           <Accordion.Item className={style.accordion_item} eventKey="0">
             <Accordion.Header
-              onClick={() => handleClick("PRICE", sortOrderPrice)}
+              onClick={() => handleSortOrderChange("PRICE", sortOrderPrice)}
               className={`${style.accordion_header} u-pb1`}
             >
               Price
             </Accordion.Header>
             <Accordion.Body className={style.accordion_body_sort}>
               <SortPrice
-                onFilterOptions={onFilterOptions}
+                onFilterOptions={setLocalFilterOptions}
                 filterOptions={localFilterOptions}
                 baseColor={baseColor}
                 backgroundColor={backgroundColor}
@@ -84,14 +76,14 @@ const FixedSidebar: React.FunctionComponent<Props> = props => {
 
           <Accordion.Item className={style.accordion_item} eventKey="1">
             <Accordion.Header
-              onClick={() => handleClick("NAME", sortOrderName)}
+              onClick={() => handleSortOrderChange("NAME", sortOrderName)}
               className={`${style.accordion_header} u-pb1`}
             >
               Alphabetically
             </Accordion.Header>
             <Accordion.Body className={style.accordion_body_sort}>
               <SortName
-                onFilterOptions={onFilterOptions}
+                onFilterOptions={setLocalFilterOptions}
                 filterOptions={localFilterOptions}
                 baseColor={baseColor}
                 backgroundColor={backgroundColor}
