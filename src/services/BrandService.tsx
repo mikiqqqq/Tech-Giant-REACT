@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BRAND_API_BASE_URL = "https://tech-giant-rest.azurewebsites.net/api/brand";
+const BRAND_API_BASE_URL = "https://tech-giant.azurewebsites.net/api/brand";
 
 class BrandService {
     fetchAllBrands(){

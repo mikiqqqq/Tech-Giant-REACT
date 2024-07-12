@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Formik, Form as FormikForm } from 'formik';
 import * as Yup from 'yup';
 import { Product, BrandType, ProductType } from '../../../../MainContainerData';
@@ -15,11 +15,14 @@ interface ProductFormProps {
     form: Product;
     handleResetForm: () => void;
     fetchProducts: () => void; // Function to trigger re-fetching products
+    handleSelectProduct: (productId: number) => void; // Callback to select the product
 }
 
-const ProductForm: React.FC<ProductFormProps> = ({ form, handleResetForm, fetchProducts }) => {
+const ProductForm: React.FC<ProductFormProps> = ({ form, handleResetForm, fetchProducts, handleSelectProduct }) => {
     const initialValues = form;
     const [previewUrl, setPreviewUrl] = useState<string | null>(form.image ? form.image : null);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const [brands, setBrands] = useState<Array<BrandType>>([]);
     const [productTypes, setProductTypes] = useState<Array<ProductType>>([]);
     useElementaryAnimation();
@@ -43,16 +46,28 @@ const ProductForm: React.FC<ProductFormProps> = ({ form, handleResetForm, fetchP
         }),
         productionYear: Yup.number()
             .required('Production year is required')
-            .min(1900, 'Year must be after 2015')
+            .min(2015, 'Year must be after 2015')
             .max(new Date().getFullYear(), `Year must be before ${new Date().getFullYear() + 1}`)
             .typeError('Production year must be a number'),
-        image: Yup.string().nullable().required('Image is required'), // Update here
+        image: Yup.string().nullable().required('Image is required'),
     });
 
     useEffect(() => {
         fetchBrands();
         fetchTypes();
     }, []);
+
+    useEffect(() => {
+        if (form.image) {
+            setPreviewUrl(form.image);
+        } else {
+            setPreviewUrl(null);
+        }
+        setSelectedFile(null);
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+    }, [form]);
 
     const fetchBrands = async () => {
         const response = await BrandService.fetchAllBrands();
@@ -66,11 +81,18 @@ const ProductForm: React.FC<ProductFormProps> = ({ form, handleResetForm, fetchP
 
     const handleSubmit = async (values: Product, { setSubmitting, resetForm }: any) => {
         try {
-            await ItemService.addItem(values);
-            fetchProducts(); // Trigger re-fetching products in ProductTable
-            resetForm(); // Reset Formik form
-            handleResetForm(); // Reset local form state
-            console.log(values);
+            let imageUrl = values.image;
+            if (selectedFile) {
+                imageUrl = await AzureBlobService.uploadImage(selectedFile);
+            }
+
+            const response = await ItemService.addItem({ ...values, image: imageUrl });
+            const savedProduct = response.data;
+
+            fetchProducts();
+            handleSelectProduct(savedProduct.id); // Select the saved product in the table
+            resetForm();
+            handleResetForm();
         } catch (error) {
             console.error('Error saving product', error);
         } finally {
@@ -81,22 +103,24 @@ const ProductForm: React.FC<ProductFormProps> = ({ form, handleResetForm, fetchP
     const handleDelete = async (id: number) => {
         try {
             await ItemService.removeItem(id);
-            fetchProducts(); // Trigger re-fetching products in ProductTable
-            handleResetForm(); // Reset local form state
+            fetchProducts();
+            handleResetForm();
         } catch (error) {
             console.error('Error deleting product', error);
         }
     };
 
-    const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>, setFieldValue: any) => {
+    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>, setFieldValue: any) => {
         const file = event.currentTarget.files?.[0];
         if (file) {
             const imageUrl = URL.createObjectURL(file);
-            setFieldValue('image', imageUrl); // Set image URL in Formik state
-            setPreviewUrl(imageUrl); // Update the preview URL for display
+            setSelectedFile(file);
+            setFieldValue('image', imageUrl);
+            setPreviewUrl(imageUrl);
         } else {
-            setFieldValue('image', null); // Set image URL to null if no file selected
-            setPreviewUrl(null); // Update the preview URL to null
+            setSelectedFile(null);
+            setFieldValue('image', null);
+            setPreviewUrl(null);
         }
     };
 
@@ -118,6 +142,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ form, handleResetForm, fetchP
                                 <BootstrapForm.Label className="u-pb1">Select Image</BootstrapForm.Label>
                                 <BootstrapForm.Control
                                     type="file"
+                                    ref={fileInputRef}
                                     onChange={(event) => handleImageChange(event as React.ChangeEvent<HTMLInputElement>, setFieldValue)}
                                     isInvalid={touched.image && !!errors.image}
                                     isValid={touched.image && !errors.image}

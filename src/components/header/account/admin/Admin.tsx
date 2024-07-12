@@ -51,12 +51,21 @@ const Admin: React.FC = () => {
         }
     }, [selectedProduct, handleEdit]);
 
+    const handleSelectProduct = useCallback((productId: number) => {
+        // Ensure the selected product is set in the state
+        const product = selectedProduct; // You may need to update this logic to fetch the correct product
+        if (product && product.id === productId) {
+            setSelectedProduct(product);
+        }
+    }, [selectedProduct]);
+
     return (
         <main className={style.panel}>
             <ProductForm
                 form={form}
                 handleResetForm={handleResetForm}
                 fetchProducts={fetchProducts}
+                handleSelectProduct={handleSelectProduct} // Pass the callback to ProductForm
             />
             <div className={`${style.product_table} animated_content`} data-animation="elementScaleIn">
                 <div className={`${style.heading} u-l1`}>Admin Panel</div>

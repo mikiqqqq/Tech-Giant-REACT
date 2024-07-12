@@ -16,7 +16,6 @@ interface Props {
   item: Product;
 }
 
-
 const Item: React.FC<Props> = ({ item }) => {
   const [, setLocalStateActiveOrder] = useLocalStorage('activeOrder');
   const [quantity, setQuantity] = useState<number>(1);
@@ -27,15 +26,15 @@ const Item: React.FC<Props> = ({ item }) => {
   useElementaryAnimation();
 
   const addToCart = async (quantity: number, orderId: number, product: Product) => {
-      if (!activeOrder) {
-        const response = await OrderService.createOrder();
-        const activeOrderId = Number(response.data);
-        setLocalStateActiveOrder(activeOrderId);
-        await OrderItemService.addOrderItem(quantity, activeOrderId, item.id);
-      } else {
-        await OrderItemService.addOrderItem(quantity, orderId, item.id);
-      }
-    };
+    if (!activeOrder) {
+      const response = await OrderService.createOrder();
+      const activeOrderId = Number(response.data);
+      setLocalStateActiveOrder(activeOrderId);
+      await OrderItemService.addOrderItem(quantity, activeOrderId, item.id);
+    } else {
+      await OrderItemService.addOrderItem(quantity, orderId, item.id);
+    }
+  };
 
   useEffect(() => {
     if (show) {
@@ -46,51 +45,54 @@ const Item: React.FC<Props> = ({ item }) => {
     }
   }, [show]);
 
-
   const truncateDescription = (description: string, maxLength = 50) => {
     if (description.length > maxLength) {
-        return description.substring(0, maxLength) + '...';
+      return description.substring(0, maxLength) + '...';
     }
     return description;
-};
+  };
 
   return (
-      <Link to={`/products/${productSlug}`} className={`${style.item_box} animated_content`}>
-        <img className={style.image} src={image_placeholder} alt={item.title}></img>
-        <div className={style.item_info}>
-          <div className={style.item_header}>
-            <div className={`${style.item_name} u-h3`}>{item.title}</div>
-            <p className={`${style.item_description} u-p2`}>{truncateDescription(item.description)}</p>
-          </div>
-
-          <div className={style.actions}>
-            <p className={`${style.item_brand} u-p2`}>{item.brand.title}</p>
-            <div className={style.hover_buttons}>
-              <ItemQuantitySelector
-                maxQuantity={item.quantity}
-                onQuantityChange={setQuantity}
-              />
-              <button
-                className={style.cart_button}
-                onClick={(e) => { e.preventDefault(); setShow(true); addToCart(
-                  quantity,
-                  activeOrder,
-                  item
-              ) }}
-                ref={target}
-              >
-                <FontAwesomeIcon className={style.icon} icon={faCartPlus} />
-              </button>
-              <Overlay target={target.current} show={show} placement="top">
-                <Tooltip id="overlay-example" className={style.tooltip}>
-                  Added
-                </Tooltip>
-              </Overlay>
-            </div>
-            <strong className={`${style.item_price} u-pb1`}>${item.price.toFixed(2)}</strong>
-          </div>
+    <Link to={`/products/${productSlug}`} className={`${style.item_box} animated_content`}>
+      <img
+        className={style.image}
+        src={item.image || image_placeholder}
+        alt={item.title}
+      />
+      <div className={style.item_info}>
+        <div className={style.item_header}>
+          <div className={`${style.item_name} u-h3`}>{item.title}</div>
+          <p className={`${style.item_description} u-p2`}>{truncateDescription(item.description)}</p>
         </div>
-      </Link>
+
+        <div className={style.actions}>
+          <p className={`${style.item_brand} u-p2`}>{item.brand.title}</p>
+          <div className={style.hover_buttons}>
+            <ItemQuantitySelector
+              maxQuantity={item.quantity}
+              onQuantityChange={setQuantity}
+            />
+            <button
+              className={style.cart_button}
+              onClick={(e) => {
+                e.preventDefault();
+                setShow(true);
+                addToCart(quantity, activeOrder, item);
+              }}
+              ref={target}
+            >
+              <FontAwesomeIcon className={style.icon} icon={faCartPlus} />
+            </button>
+            <Overlay target={target.current} show={show} placement="top">
+              <Tooltip id="overlay-example" className={style.tooltip}>
+                Added
+              </Tooltip>
+            </Overlay>
+          </div>
+          <strong className={`${style.item_price} u-pb1`}>€{item.price.toFixed(2)}</strong>
+        </div>
+      </div>
+    </Link>
   );
 };
 

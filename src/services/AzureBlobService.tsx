@@ -9,14 +9,13 @@ class AzureBlobService {
 
     constructor() {
         const containerUrl = `https://${storageAccountName}.blob.core.windows.net/${containerName}`;
-        this.containerClient = new ContainerClient(`${containerUrl}?${sasToken}`);
+        this.containerClient = new ContainerClient(`https://techgiantst.blob.core.windows.net/images?sp=racwd&st=2024-07-11T21:27:31Z&se=2024-07-12T05:27:31Z&spr=https&sv=2022-11-02&sr=c&sig=rEFLkF1TrHwI5U9EZZhsjDkJ5b1VQxs6gH1OtOlzyDE%3D`);
     }
 
     async uploadImage(file: File): Promise<string> {
         const blobName = file.name;
         const blobClient = this.containerClient.getBlockBlobClient(blobName);
         await blobClient.uploadData(file);
-        console.log(blobClient)
         return blobClient.url.split('?')[0]; // Return the URL without the SAS token
     }
 

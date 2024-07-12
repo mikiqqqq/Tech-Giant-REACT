@@ -35,6 +35,7 @@ const ProductTable: React.FC<ProductTableProps> = React.memo(({ handleEdit, relo
             }
         }
     };
+
     const handleRowClick = (product: Product) => {
         setSelectedProductId(product.id);
         handleEdit(product);
@@ -69,7 +70,7 @@ const ProductTable: React.FC<ProductTableProps> = React.memo(({ handleEdit, relo
                             tabIndex={0}
                             key={product.id}
                             onClick={() => handleRowClick(product)}
-                            onKeyDown={(event) => handleKeydown(event, product)}  
+                            onKeyDown={(event) => handleKeydown(event, product)}
                             className={selectedProductId === product.id ? style.selected : ''}
                         >
                             <td>{product.id}</td>

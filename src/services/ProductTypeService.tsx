@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const PRODUCT_TYPE_API_BASE_URL = "https://tech-giant-rest.azurewebsites.net/api/productType";
+const PRODUCT_TYPE_API_BASE_URL = "https://tech-giant.azurewebsites.net/api/productType";
 
 class ProductTypeService {
 

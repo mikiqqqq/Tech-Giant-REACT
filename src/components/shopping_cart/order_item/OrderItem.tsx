@@ -68,7 +68,7 @@ const OrderItem: React.FunctionComponent<Props> = ({ orderItem, onPriceChange, o
             <FontAwesomeIcon icon={faClose} className={style.icon} />
           </Button>
 
-           <Alert ref={alertRef} tabIndex={-1}  show={showAlert} id={style.alert} variant="danger" onClick={(e) => e.preventDefault()}>
+          <Alert ref={alertRef} tabIndex={-1}  show={showAlert} id={style.alert} variant="danger" onClick={(e) => e.preventDefault()}>
               <Alert.Heading className={`u-h3`}>{product.title}</Alert.Heading>
               <p>Are you sure you want to remove this item?</p>
               <hr />
@@ -87,7 +87,7 @@ const OrderItem: React.FunctionComponent<Props> = ({ orderItem, onPriceChange, o
           <div className={`${style.actions} custom-display`}>
             <QuantitySelector orderItem={orderItem} product={product} onPriceChange={onPriceChange} />
 
-            <strong className={`u-p1`} id={style.item_price}>${(orderItem.quantity * product.price).toFixed(2)}</strong>
+            <strong className={`u-p1`} id={style.item_price}>€{(orderItem.quantity * product.price).toFixed(2)}</strong>
           </div>
         </div>
       </div>
