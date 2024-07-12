@@ -7,31 +7,24 @@ interface Props {
     filterOptions: FilterOptions;
     baseColor: string;
     backgroundColor: string;
-    onSortOrderChange: (sortOrder: string) => void; // Add this prop
+    onSortOrderChange: (sortOrder: string) => void;
 }
 
 const SortPrice: React.FunctionComponent<Props> = props => {
-    const [filterOptions, setFilterOptions] = useState<FilterOptions>(props.filterOptions);
     const [isActive, setIsActive] = useState<string>('ASC');
 
     const handleClick = (sortOrder: string) => {
         setIsActive(sortOrder);
 
-        setFilterOptions(() => {
-            return {
-                ...props.filterOptions,
-                sortBy: "PRICE",
-                sortOrder: sortOrder
-            };
-        });
-        
+        const updatedFilterOptions = {
+            ...props.filterOptions,
+            sortBy: "PRICE",
+            sortOrder: sortOrder
+        };
 
+        props.onFilterOptions(updatedFilterOptions);
         props.onSortOrderChange(sortOrder); // Call this when sort order changes
     };
-
-    useEffect(() => {
-        props.onFilterOptions(filterOptions);
-    }, [filterOptions]);
 
     return (
         <>
