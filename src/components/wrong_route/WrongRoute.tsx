@@ -23,12 +23,10 @@ const WrongRoute: React.FunctionComponent = () => {
     return (
         <main className={style.main}>
             <div>
-                <h2>Error 404</h2>
-                <p>Sorry, this page doesn't exist.</p>
+                <div className="u-l1">Error 404</div>
+                <p className="u-p2">Sorry, this page doesn't exist.</p>
+                <Link to="/" className="button_complementary u-pb1 btn btn-primary">Go Home</Link>
             </div>
-            <Link to="/">
-                Go Home
-            </Link>
             <FontAwesomeIcon icon={faFaceFrown} className={style.icon}
             style={{transform: rotate ? 'scaleX(-1)' : 'scaleX(1)'}}/>
         </main>

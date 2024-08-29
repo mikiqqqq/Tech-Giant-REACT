@@ -13,7 +13,7 @@ class AzureBlobService {
         this.initializeClient();
     }
 
-    private async initializeClient() {
+    async initializeClient() {
         try {
             const token = localStorage.getItem('token');
             if (!token) {

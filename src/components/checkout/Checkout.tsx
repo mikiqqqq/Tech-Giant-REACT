@@ -152,7 +152,7 @@ const Checkout: React.FunctionComponent = () => {
                             </p>
                         </div>
                         <p className={`${style.redirect} u-s1 animated_content`} data-animation="elementFromBottom">You will be redirected to the main page shortly.</p>
-                        <FontAwesomeIcon className={`${style.icon_truck} animated_content`} icon={faTruckFast} data-animation="elementScaleIn"/>
+                        <FontAwesomeIcon className={`${style.icon_truck}`} icon={faTruckFast}/>
                     </div>
                 </>
             ) : (

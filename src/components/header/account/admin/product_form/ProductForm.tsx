@@ -69,6 +69,18 @@ const ProductForm: React.FC<ProductFormProps> = ({ form, handleResetForm, fetchP
         }
     }, [form]);
 
+    useEffect(() => {
+        const initializeBlobClient = async () => {
+            try {
+                await AzureBlobService.initializeClient();
+            } catch (error) {
+                console.error('Failed to initialize Azure Blob Service', error);
+            }
+        };
+    
+        initializeBlobClient();
+    }, []);
+
     const fetchBrands = async () => {
         const response = await BrandService.fetchAllBrands();
         setBrands(response.data);

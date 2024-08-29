@@ -74,7 +74,7 @@
     font-size: 250px;
 }
 
-.icon_truck {
+.icon_truck path {
     fill: var(--background);
 }
 
