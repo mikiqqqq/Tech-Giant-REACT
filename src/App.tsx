@@ -58,6 +58,7 @@ function App() {
 
   const handleFilterOptionsChange = (newFilterOptions: FilterOptions) => {
     setFilterOptions(newFilterOptions);
+    console.log('render app')
   };
 
   const handleClearAll = () => {

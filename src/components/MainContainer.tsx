@@ -17,9 +17,9 @@ const MainContainer: React.FC<MainContainerProps> = ({ items, error, onClearAll 
   const [inputValue, setInputValue] = useState('');
   
   const searchQuery = searchParams.get('search') || '';
-  
   // Use useMemo to compute filteredItems only when items or searchQuery changes
   const filteredItems = useMemo(() => {
+    console.log('render main')
     if (searchQuery) {
       return items.filter(item => 
         item.title.toLowerCase().includes(searchQuery.toLowerCase())

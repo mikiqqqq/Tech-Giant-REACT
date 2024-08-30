@@ -69,5 +69,7 @@ button.menu_item svg {
     .sidebar_menu {
         max-width: 343px;
         padding: 2rem;
+        position: sticky;
+        top: 6rem;
     }
 }
