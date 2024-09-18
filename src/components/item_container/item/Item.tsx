@@ -23,7 +23,8 @@ const Item: React.FC<Props> = ({ item }) => {
   const target = useRef(null);
   const activeOrder = Number(localStorage.getItem('activeOrder'));
   const productSlug = item.title.toLowerCase().replace(/\s+/g, '-') + '-' + item.id;
-  useElementaryAnimation();
+  const hasRun = sessionStorage.getItem('animationHasRun') === 'true';
+
 
   const addToCart = async (quantity: number, orderId: number, product: Product) => {
     if (!activeOrder) {
@@ -53,7 +54,7 @@ const Item: React.FC<Props> = ({ item }) => {
   };
 
   return (
-    <Link to={`/products/${productSlug}`} className={`${style.item_box} animated_content`}>
+    <Link to={`/products/${productSlug}`} className={`${style.item_box}`}>
       <img
         className={style.image}
         src={item.image || image_placeholder}
